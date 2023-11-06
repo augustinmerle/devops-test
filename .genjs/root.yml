@@ -1,0 +1,13 @@
+type: monorepo-platform
+
+enabled_features:
+  - terraform_vars
+  - terraform_shared_cache
+  - github_vars
+
+vars:
+  npm_client: yarn
+  makefile:
+    generate_target: true
+  readme:
+    name: devops-test
