@@ -69,8 +69,17 @@ infra-init-upgrade: generate-terraform
 	@make -C infra/ init-upgrade env=$(env)
 infra-layer-plugins-upgrade:
 	@echo "Cleaning Terraform plugins directory: $(layer)"
+	@rm -rf infra/environments/dev/$(layer)/.terraform/plugins infra/environments/dev/$(layer)/.terraform/providers infra/environments/dev/$(layer)/.terraform.lock.hcl
+	@rm -rf infra/environments/preprod/$(layer)/.terraform/plugins infra/environments/preprod/$(layer)/.terraform/providers infra/environments/preprod/$(layer)/.terraform.lock.hcl
+	@rm -rf infra/environments/prod/$(layer)/.terraform/plugins infra/environments/prod/$(layer)/.terraform/providers infra/environments/prod/$(layer)/.terraform.lock.hcl
 	@echo "Fetching Terraform plugins: $(layer)"
+	@make infra-init-upgrade layer=$(layer) env=dev
+	@make infra-init-upgrade layer=$(layer) env=preprod
+	@make infra-init-upgrade layer=$(layer) env=prod
 	@echo "Initializing: $(layer)"
+	@make infra-init layer=$(layer) env=dev
+	@make infra-init layer=$(layer) env=preprod
+	@make infra-init layer=$(layer) env=prod
 infra-list-layers: generate-terraform
 	@make -C infra/ list-layers env=$(env)
 infra-lock-providers: generate-terraform
@@ -99,6 +108,9 @@ output-json: generate-terraform
 outputs: generate-terraform
 	@make -C infra/ outputs env=$(env)
 
+pr:
+	@hub pull-request -b $(b)
+
 pre-install: pre-install-root
 pre-install-root: install-root
 
@@ -109,6 +121,13 @@ provision-full: generate-terraform
 
 start:
 	@npx concurrently -n  
+
+switch-dev:
+	@true
+switch-preprod:
+	@true
+switch-prod:
+	@true
 
 test:
 	@true
@@ -123,7 +142,9 @@ test:
 		migrate \
 		output output-json \
 		outputs \
+		pr \
 		pre-install pre-install-root \
 		provision provision-full \
 		start \
+		switch-dev switch-preprod switch-prod \
 		test

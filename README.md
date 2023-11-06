@@ -1,9 +1,14 @@
-# MYPROJECT
+# PLATFORM
+`platform` is the codename of the G8w devops-test.
 
 ## Introduction
 
 This repository is a mono-repository that contains all the code for the platform.
 
+This mono-repo is composed of 2 technical sub-projects:
+
+* `.github` (CI/CD pipeline scripts)
+* `infra` (infrastructure as code)
 
 The noticeable technologies used in this repository are (not exhaustive):
 
@@ -16,6 +21,10 @@ The noticeable technologies used in this repository are (not exhaustive):
 * [Amazon Web Services (AWS)](https://aws.amazon.com/)
 * [GenJS](https://genjs.dev)
 * [Git](https://git-scm.com/)
+* [GitHub](https://github.com/)
+* [GitHub Actions](https://github.com/features/actions)
+* [GitHub Packages](https://github.com/features/packages)
+* [Hub (for Git, by GitHub)](https://github.com/github/hub)
 * [JSON](https://www.json.org/json-fr.html)
 * [Javascript (ES6)](http://es6-features.org/)
 * [Jest](https://jestjs.io/)
@@ -25,7 +34,13 @@ The noticeable technologies used in this repository are (not exhaustive):
 * [NVM](https://github.com/nvm-sh/nvm)
 * [Node.js](https://nodejs.org/en/)
 * [Prettier](https://prettier.io/)
+* [SSH (for GitHub)](https://help.github.com/en/github/authenticating-to-github/adding-a-new-ssh-key-to-your-github-account)
+* [Terraform](https://www.terraform.io/)
+* [Terraform Cloud](https://app.terraform.io/)
 * [Yarn](https://yarnpkg.com/)
+* [tfenv](https://github.com/tfutils/tfenv)
+* [~/.npmrc (for GitHub)](https://docs.github.com/en/packages/using-github-packages-with-your-projects-ecosystem/configuring-npm-for-use-with-github-packages)
+* [~/.terraformrc (for Terraform Cloud)](https://app.terraform.io/)
 
 
 ## Our Team's 10 Commandments
@@ -75,6 +90,13 @@ We do not recommend Text-only Editor (Sublime-Text, TextEdit, vi, vim, emacs, ..
 
 ### Required CLI Tools & Settings
 
+#### Git
+
+    $ git --version
+    git version 2.24.2 (Apple Git-127)
+
+if not installed, see [Git installation procedure](#install-git)
+
 #### Make / Makefile
 
     $ make -v
@@ -95,12 +117,29 @@ if not installed, see [Make installation procedure](#install-make).
 
 if not installed, see [NVM installation procedure](#install-nvm).
 
-#### Git
+#### tfenv
+
+    $ tfenv -v
+    tfenv 1.0.2
+
+if not installed, see [tfenv installation procedure](#install-tfenv).
+
+#### Hub (for Git, by GitHub)
 
     $ git --version
     git version 2.24.2 (Apple Git-127)
+    hub version 2.14.2
 
-if not installed, see [Git installation procedure](#install-git)
+if not installed, see [Hub installation procedure](#install-hub)
+
+#### SSH (for GitHub)
+
+    $ ssh git@github.com
+    PTY allocation request failed on channel 0
+    Hi xxxx! You've successfully authenticated, but GitHub does not provide shell access.
+    Connection to github.com closed.
+
+if not installed, see [SSH installation procedure](#install-ssh)
 
 #### Node.js
 
@@ -114,6 +153,13 @@ if the displayed version is older:
     Now using node v14.3.0 (npm v6.14.5)
 
 if not installed, see [Node installation procedure](#install-node).
+
+#### Terraform
+
+    $ terraform -v
+    Terraform v0.12.26
+
+if not installed, see [Terraform installation procedure](#install-terraform).
 
 #### AWS CLI
 
@@ -132,27 +178,29 @@ if not installed, see [NPM installation procedure](#install-npm).
 #### AWS Profiles
 
 
-    $ AWS_PROFILE=mycompany-dev aws s3 ls
+    $ AWS_PROFILE=g8w-dev aws s3 ls
     2020-06-03 19:21:42 xxxx
     2020-06-03 18:37:03 yyyy
 
 
-    $ AWS_PROFILE=mycompany-test aws s3 ls
+    $ AWS_PROFILE=g8w-preprod aws s3 ls
     2020-06-03 19:21:42 xxxx
     2020-06-03 18:37:03 yyyy
 
 
-    $ AWS_PROFILE=mycompany-preprod aws s3 ls
-    2020-06-03 19:21:42 xxxx
-    2020-06-03 18:37:03 yyyy
-
-
-    $ AWS_PROFILE=mycompany-prod aws s3 ls
+    $ AWS_PROFILE=g8w-prod aws s3 ls
     2020-06-03 19:21:42 xxxx
     2020-06-03 18:37:03 yyyy
 
 
 if not installed, see [AWS Profiles installation procedure](#install-aws-profiles).
+
+#### ~/.npmrc (for GitHub)
+
+    $ npm whoami --registry https://npm.pkg.github.com
+    <your-github-login>
+
+if not installed, see [.npmrc installation procedure](#install-npmrc).
 
 #### Yarn
 
@@ -161,11 +209,22 @@ if not installed, see [AWS Profiles installation procedure](#install-aws-profile
 
 if not installed, see [Yarn installation procedure](#install-yarn).
 
+#### ~/.terraformrc (for Terraform Cloud)
+
+    $ cat ~/.terraformrc
+    credentials "app.terraform.io" {
+      token = "XXXXXXXXXX..."
+    }
+
+if not installed, see [Terraformrc installation procedure](#install-terraformrc).
+
 
 
 
 ## Installation
 
+    git clone git@github.com:augustinmerle/devops-test.git
+    cd platform
     make pre-install
     make
 
@@ -214,7 +273,6 @@ By default if no ` env=<env>` is provided on the command line, the default value
 ...or to specify a target env explicitly:
 
     make build env=dev
-    make build env=test
     make build env=preprod
     make build env=prod
 
@@ -225,13 +283,13 @@ By default if no ` env=<env>` is provided on the command line, the default value
 
 ### Deploy to an environment
 
-As a pre-requisite, you need to have build the production-ready version of the website targeted for the specified `env` (`dev|test|preprod|prod`)
+As a pre-requisite, you need to have build the production-ready version of the website targeted for the specified `env` (`dev|preprod|prod`)
 
     make
     make test
     make build env=<env>
 
-where `<env>` must be one of the values: `dev`, `test`, `preprod`, `prod`.
+where `<env>` must be one of the values: `dev`, `preprod`, `prod`.
 
 The first time you want to deploy from your local environment, you need to initialize terraform locally:
 
@@ -254,6 +312,16 @@ You can deploy a single project by executing one of these commands:
 
 ### Optional Installation Procedures
 
+#### Install Git
+
+[Follow instructions for your operating system](https://git-scm.com/downloads)
+
+`Acceptance test`
+
+    git --version
+
+... should display the version of Git.
+
 #### Install Make / Makefile
 
 `make` should be already installed on MacOS. For linux installation, search for `install make <name-of-distro>` on google ;)
@@ -274,15 +342,46 @@ You can deploy a single project by executing one of these commands:
 
 ... should display `0.35.3` or a higher version.
 
-#### Install Git
+#### Install tfenv
 
-[Follow instructions for your operating system](https://git-scm.com/downloads)
+[Follow instructions for your operating system](https://github.com/tfutils/tfenv)
 
 `Acceptance test`
 
-    git --version
+    tfenv -v
 
-... should display the version of Git.
+... should display `1.0.2` or a higher version.
+
+#### Install Hub (for Git, by GitHub)
+
+[Follow instructions for your operating system](https://hub.github.com/)
+
+To be able to use `hub` as a transparent wrapper of `git`, add the following to your `~/.bash_profile` / `~/.zshrc file` or equivalent:
+
+    eval "$(hub alias -s)"
+
+`Acceptance test`
+
+    git -v
+
+... should display the version of `Git + Hub`.
+
+#### Install SSH (for GitHub)
+
+An SSH client should already being installed on your system. If not, please add an ssh client using the official installation method for your operating system.
+Then, ensure the following is displaying the SSH client version:
+
+    $ ssh -V
+    OpenSSH_8.1p1, LibreSSL 2.7.3
+
+You need to have a personal ssh key in order to access th GitHub restricted projects of your organization.
+If not yet set on your local environment and on your GitHub account, please [follow instructions for your operating system](https://help.github.com/en/github/authenticating-to-github/adding-a-new-ssh-key-to-your-github-account)
+
+`Acceptance test`
+
+    ssh git@github.com
+
+... should display a GitHub ssh server greeting with your username.
 
 #### Install Node.js
 
@@ -296,6 +395,20 @@ You have to install NVM first. Then:
     node -v
 
 ... should display `v14.3.0` or a higher version.
+
+#### Install Terraform
+
+You have to install tfenv first. Then:
+
+    tfenv install
+
+It will install the Terraform version specified in the `./.terraform-version` file.
+
+`Acceptance test`
+
+    terraform -v
+
+... should display `0.12.26` or a higher version.
 
 #### Install AWS CLI
 
@@ -334,39 +447,49 @@ To set your profiles, follow these steps:
 * ensure you have the following content to your `~/.aws/config` file (or create it with that content):
 
 
-    [profile mycompany-dev]
-    role_arn=arn:aws:iam::XXXXXXXXXXXX:role/OrganizationAccountAccessRole
-    source_profile=mycompany
+    [profile g8w-dev]
+    role_arn=arn:aws:iam::380343732230:role/OrganizationAccountAccessRole
+    source_profile=g8w
 
-    [profile mycompany-test]
-    role_arn=arn:aws:iam::XXXXXXXXXXXX:role/OrganizationAccountAccessRole
-    source_profile=mycompany
+    [profile g8w-preprod]
+    role_arn=arn:aws:iam::380343732230:role/OrganizationAccountAccessRole
+    source_profile=g8w
 
-    [profile mycompany-preprod]
-    role_arn=arn:aws:iam::XXXXXXXXXXXX:role/OrganizationAccountAccessRole
-    source_profile=mycompany
-
-    [profile mycompany-prod]
-    role_arn=arn:aws:iam::YYYYYYYYYYYY:role/OrganizationAccountAccessRole
-    source_profile=mycompany
+    [profile g8w-prod]
+    role_arn=arn:aws:iam::865321437484:role/OrganizationAccountAccessRole
+    source_profile=g8w
 
 
 * ensure you have the following content (at least) in your `~/.aws/credentials` file (or create it with that content):
 
 
-    [mycompany]
+    [g8w]
     aws_access_key_id = <your-AKI-here>
     aws_secret_access_key = <your-SAK-here>
 
 
 `Acceptance test`
 
-    AWS_PROFILE=mycompany-dev aws s3 ls
-    AWS_PROFILE=mycompany-test aws s3 ls
-    AWS_PROFILE=mycompany-preprod aws s3 ls
-    AWS_PROFILE=mycompany-prod aws s3 ls
+    AWS_PROFILE=g8w-dev aws s3 ls
+    AWS_PROFILE=g8w-preprod aws s3 ls
+    AWS_PROFILE=g8w-prod aws s3 ls
 
 ... should display a non empty list of s3 buckets for DEV environment.
+
+#### Install ~/.npmrc (for GitHub)
+
+Ensure first to have create a GitHub Personal Token, with scope package read/write enabled, and pick it up.
+
+Then, add the following content to your `~/.npmrc` file (create it if not exist):
+
+    //npm.pkg.github.com/:_authToken=<your-personal-github-token-with-packages-read-write-scope-enabled>
+    @g8wdev:registry=https://npm.pkg.github.com
+
+`Acceptance test`
+
+    npm whoami --registry https://npm.pkg.github.com
+
+... should display your personal GitHub username.
 
 #### Install Yarn
 
@@ -377,6 +500,32 @@ To set your profiles, follow these steps:
     yarn -v
 
 ... should display `1.22.4` or a higher version.
+
+#### Install ~/.terraformrc (for Terraform Cloud)
+
+* if not yet provided to you, request an access to app.terraform.io to the Team Tech Lead
+* browse to https://app.terraform.io
+* log in with your account
+* go to upper right corner, click on your avatar
+* click User Settings link
+* go to Tokens menu item in the left
+* if not yet created, create a new personal Token and pick it up (so-called `the token`)
+
+Then add the following content to your `~/.terraformrc` file (create it if not exist):
+
+    credentials "app.terraform.io" {
+      token = "the token"
+    }
+
+if needed, here is the [Official Terraform Credentials documentation](https://www.terraform.io/docs/commands/cli-config.html#credentials-1)
+
+`Acceptance test`
+
+    $ cat ~/.terraformrc
+    credentials "app.terraform.io" {
+      token = "XXXXXXXXXX..."
+    }
+
 
 
 

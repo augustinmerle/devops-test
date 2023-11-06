@@ -1,0 +1,19 @@
+type: cicd-github
+
+name: .github
+description: CI/CD pipeline scripts
+
+vars:
+  node_support: true
+  terraform_support: true
+  aws_support: true
+  terraform_version: 1.2.2
+  node_version_constraint: 16.x
+  github_workflow_job_os: ubuntu-20.04
+  github:
+    workflows:
+      push-to-feature-branch: true
+      pull-request-on-feature-branch: true
+    parallel_workflows:
+      pull-request-to-env-infra: true
+      deploy-to-env-infra: true

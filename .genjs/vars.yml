@@ -1,0 +1,19 @@
+author: {name: Augustin de Laveaucoupet, email: augustin@gentleman-worker.com}
+company: gentlemen-worker
+project_prefix: g8w
+project_name: platform
+project_description: G8w devops-test
+project_git_url: git@github.com:augustinmerle/devops-test.git
+package_registry: npm.pkg.github.com
+package_registry_secret_var: CUSTOM_GITHUB_TOKEN
+github_aws_profile: g8w-${{env.env}}
+npm_scope: g8wdev
+scm: github
+license: ISC
+terraform_version: 1.2.2
+
+project_envs:
+  dev: {awsAccount: "380343732230", priority: 1}
+  #  test: {awsAccount: "380343732230", priority: 2}
+  preprod: {awsAccount: "380343732230", priority: 3}
+  prod: {awsAccount: "865321437484", priority: 4}

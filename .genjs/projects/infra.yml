@@ -1,0 +1,55 @@
+type: terraform-infra
+
+description: infrastructure as code
+
+vars:
+  makefile:
+    exports:
+      AWS_STS_REGIONAL_ENDPOINTS: regional
+  common:
+    terraform_version: 1.2.2
+    terraform_organization: dvp_test
+    lambda_node_version: nodejs16.x
+    aws_provider_version_constraint: '< 5.0.0'
+    module_layer_webapi_source: genstackio/layer-webapi/aws
+    module_layer_webapi_version: 0.6.1
+    module_layer_app_source: genstackio/layer-app/aws
+    module_layer_app_version: 0.3.1
+    module_layer_cdn_source: genstackio/layer-cdn/aws
+    module_layer_cdn_version: 0.3.1
+    module_lambda_source: genstackio/lambda/aws
+    module_lambda_version: 0.3.1
+    layer_full_name: "{{env}}-platform-{{layer}}"
+    region: eu-west-3
+    shared_region: eu-west-1
+    central_region: us-east-1
+    debug: "false"
+    alternate_domains: []
+    subzones: []
+    redirect_subzones: []
+    root_dns: g8w.co
+    apex_redirect: "false"
+    razzle_verbose: ""
+    callr_api_token: ""
+    jwt_secret: this-is-My-SEcrÈt-secreT-Secret
+  layers:
+    auth:
+      depends: []
+    info:
+      depends: []
+    customers:
+      depends: []
+  environments:
+    dev:
+      vars:
+        dns: dev.{{root_dns}}
+        debug: "true"
+        razzle_verbose: "1"
+    preprod:
+      vars: []
+    prod:
+      vars:
+        dns: "{{root_dns}}"
+        subzones: [dev]
+
+
