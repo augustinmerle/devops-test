@@ -1,0 +1,36 @@
+all:
+  children:
+    dev:
+      hosts:
+        host1:
+          ansible_host: 127.0.0.1
+          ansible_connection: local
+          ansible_docker_extra_args: "-H unix:///var/run/docker.sock"
+          app_volume: secret-keys-volume-dev
+          network_name: "devops-test-dev"
+          app_env: "dev"
+          app_image: "crccheck/hello-world:latest"
+          app_port: 8000
+          external_port: 8181
+          debug: true
+          external_url: "https://dev/approve"
+          client: "dev_client_external"
+          interaction_mode: "API"
+          device_id: 2346456
+    staging:
+      hosts:
+        host2:
+          ansible_host: 127.0.0.1
+          ansible_connection: local
+          ansible_docker_extra_args: "-H unix:///var/run/docker.sock"
+          app_volume: secret-keys-volume-staging
+          network_name: "devops-test-staging"
+          app_env: "staging"
+          app_image: "crccheck/hello-world:latest"
+          app_port: 8000
+          external_port: 8082
+          debug: false
+          external_url: "https://staging/approve"
+          client: "staging_client_external"
+          interaction_mode: "API"
+          device_id: 32443532

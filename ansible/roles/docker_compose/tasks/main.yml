@@ -1,0 +1,11 @@
+---
+# Tâches pour installer Docker Compose
+- name: Download Docker Compose binary
+  get_url:
+    url: "https://github.com/docker/compose/releases/download/{{ docker_compose_version }}/docker-compose-{{ ansible_system }}-{{ ansible_userspace_architecture }}"
+    dest: "/usr/local/bin/docker-compose"
+    mode: 'u+x,g+x'
+  when: ansible_os_family == 'Debian'
+
+
+

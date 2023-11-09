@@ -1,0 +1,17 @@
+events {}
+
+http {
+    upstream app-{{env}} {
+        # Utilisez le nom du service Docker pour le load balancing
+        server app-{{env}}:{{app_port}};
+    }
+
+    server {
+        listen 80; # NGINX écoute sur le port 80 à l'intérieur du conteneur
+
+        location / {
+            proxy_pass http://app-{{env}}; # Route vers le groupe de serveurs upstream
+            # ... autres directives de proxy ...
+        }
+    }
+}

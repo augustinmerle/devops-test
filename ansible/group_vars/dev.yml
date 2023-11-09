@@ -1,0 +1,12 @@
+app_port: 8181
+app_volume: "secret-keys-volume-dev"
+external_url: "https://dev/approve"
+client: "dev_client_external"
+interaction_mode: "API"
+device_id: "2346456"
+debug: true
+tuning: true
+env: "dev"
+network_name: "devops-test-dev"
+app_env: "dev"
+app_image: "crccheck/hello-world:latest"

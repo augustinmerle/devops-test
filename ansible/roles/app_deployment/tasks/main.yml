@@ -1,0 +1,29 @@
+---
+- name: Check if network_name is defined
+  fail:
+    msg: "The variable 'network_name' is not defined"
+  when: network_name is not defined
+
+- name: Check if env is defined
+  fail:
+    msg: "The variable 'env' is not defined"
+  when: env is not defined
+
+# Tâches pour déployer l'application
+- name: Create a volume for persistent storage
+  docker_volume:
+    name: "{{ app_volume }}"
+    state: present
+
+# Ici vous pouvez ajouter d'autres tâches pour le déploiement de votre application
+
+- name: Generate Docker Compose configuration file
+  template:
+    src: docker-compose.yml.j2
+    dest: ./lib/{{env}}/webapp/docker-compose.yml
+
+- name: Run docker-compose up
+  command: docker-compose  -p webapp-{{env}} up -d
+  args:
+    chdir: ./lib/{{env}}/webapp/
+

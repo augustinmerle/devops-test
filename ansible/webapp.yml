@@ -1,0 +1,11 @@
+---
+  - name: Deploy the whole application stack
+    hosts: all
+    become: true
+    roles:
+      - docker
+#      - docker_compose
+#      - ha_proxy
+      - nginx_proxy
+      - app_deployment
+
