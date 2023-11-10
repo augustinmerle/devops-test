@@ -1,7 +1,7 @@
 {
     "common": {
         "terraform_version": "1.2.2",
-        "terraform_organization": "dvp_test",
+        "terraform_organization": "devops-test-alv",
         "lambda_node_version": "nodejs16.x",
         "aws_provider_version_constraint": "< 5.0.0",
         "module_layer_webapi_source": "genstackio/layer-webapi/aws",

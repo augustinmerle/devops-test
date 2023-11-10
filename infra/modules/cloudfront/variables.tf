@@ -65,30 +65,6 @@ variable "error_404_page_code" {
 variable "certificate_arn" {
   type = string
 }
-/*
-variable "zone" {
-  type = string
-}
 
-variable "apex_redirect" {
-  type    = bool
-  default = false
-}
-
-
-variable "lambdas" {
-  type = list(object({
-    event_type   = string
-    lambda_arn   = string
-    include_body = bool
-  }))
-  default = []
-}
-
-variable "can_overwrite" {
-  type        = bool
-  default     = false
-  description = "Allow overwriting route53 records for pre-existing CNAME/certificates"
-}
 
 

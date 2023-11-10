@@ -7,7 +7,7 @@ variable "bucket_name" {
 variable "zone" {
   type = string
 }
-variable "dns" {
+variable "domain_name" {
   type = string
 }
 variable "index_document" {

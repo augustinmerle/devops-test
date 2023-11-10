@@ -1,33 +1,33 @@
 terraform {
-  required_version = ">= {{terraform_version}}"
+  required_version = ">= 1.2.2"
   required_providers {
     aws = {
       source  = "hashicorp/aws"
-      version = "{{{aws_provider_version_constraint}}}"
+      version = "< 5.0.0"
     }
   }
   backend "remote" {
     hostname     = "app.terraform.io"
-    organization = "{{terraform_organization}}"
+    organization = "devops-test-alv"
     workspaces {
-      name = "{{layer_full_name}}"
+      name = "dev-platform-auth"
     }
   }
 }
 
 provider "aws" {
-  region = "{{region}}"
+  region = "eu-west-3"
 }
 
 provider "aws" {
   alias  = "acm"
-  region = "{{central_region}}"
+  region = "us-east-1"
 }
 
 module "webapp_auth" {
   source = "../../../modules/webapp"
-  bucket_name = "bucket1-{{env}}"
+  bucket_name = "bucket1-dev"
   name = "auth"
-  domain_name= "devopstest.{{dns}}"
+  domain_name= "devopstest.dev.g8w.co"
   zone = "Z060497011SI50TIA0K9T"
 }

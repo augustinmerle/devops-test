@@ -24,10 +24,14 @@ provider "aws" {
   region = "{{central_region}}"
 }
 
-module "webapp_auth" {
+module "webapp_customers" {
   source = "../../../modules/webapp"
-  bucket_name = "bucket1-{{env}}"
-  name = "auth"
+  bucket_name = "bucket3-{{env}}"
+  name = "customers"
   domain_name= "devopstest.{{dns}}"
   zone = "Z060497011SI50TIA0K9T"
+}
+
+output "cloudfront_customers_id" {
+  value = module.webapp_customers.cloudfront_id
 }

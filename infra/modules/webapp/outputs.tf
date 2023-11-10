@@ -1,18 +1,16 @@
 output "cloudfront_id" {
-  value = aws_cloudfront_distribution.website.id
+  value = module.cloudfront.cloudfront_id
 }
 output "cloudfront_arn" {
-  value = aws_cloudfront_distribution.website.arn
+  value = module.cloudfront.cloudfront_arn
 }
-output "dns" {
-  value = var.dns
-}
+
 output "bucket_arn" {
-  value = aws_s3_bucket.website.arn
+  value = module.website.bucket_arn
 }
 output "bucket_id" {
-  value = aws_s3_bucket.website.id
+  value = module.website.bucket_id
 }
 output "bucket_name" {
-  value = aws_s3_bucket.website.bucket
+  value = module.website.bucket_name
 }

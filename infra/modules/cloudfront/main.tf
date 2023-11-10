@@ -1,6 +1,7 @@
 resource "aws_cloudfront_distribution" "s3distribution" {
   origin {
     domain_name = var.domain_name
+#    origin_path = "/${var.name}"
     origin_id   = local.origin_target_id
     custom_origin_config {
       // These are all the defaults.
@@ -20,10 +21,10 @@ resource "aws_cloudfront_distribution" "s3distribution" {
 
   enabled             = true
   is_ipv6_enabled     = true
-  comment             = "s3distribution ${var.name} Distribution"
+  comment             = "s3distribution ${var.name}"
   default_root_object = var.default_root_object
 
-  aliases = [var.dns]
+  aliases = (var.dns != "")?[var.dns]: null
 
   default_cache_behavior {
     allowed_methods  = ["GET", "HEAD", "OPTIONS"]
@@ -49,7 +50,6 @@ resource "aws_cloudfront_distribution" "s3distribution" {
     cache_policy_id            = var.cache_policy_id
     origin_request_policy_id   = var.origin_request_policy_id
     response_headers_policy_id = var.response_headers_policy_id
-
 
   }
 
@@ -81,6 +81,8 @@ resource "aws_cloudfront_distribution" "s3distribution" {
   }
 
   viewer_certificate {
+
+    cloudfront_default_certificate = var.certificate_arn != "" ?false:true
     acm_certificate_arn      = var.certificate_arn
     ssl_support_method       = "sni-only"
     minimum_protocol_version = "TLSv1"
@@ -105,57 +107,3 @@ resource "aws_cloudfront_distribution" "s3distribution" {
   }
 }
 
-/*resource "aws_cloudfront_distribution" "s3distribution_redirect_apex" {
-  count = var.apex_redirect ? 1 : 0
-  origin {
-    domain_name = aws_s3_bucket.website_redirect_apex[count.index].website_endpoint
-    origin_id   = local.origin_target_id
-    custom_origin_config {
-      // These are all the defaults.
-      http_port              = "80"
-      https_port             = "443"
-      origin_protocol_policy = "http-only"
-      origin_ssl_protocols   = ["TLSv1", "TLSv1.1", "TLSv1.2"]
-    }
-  }
-
-  enabled         = true
-  is_ipv6_enabled = true
-  comment         = "Website ${var.name} Redirect to Apex Distribution"
-
-  aliases = ["www.${var.dns}"]
-
-  default_cache_behavior {
-    allowed_methods  = ["GET", "HEAD", "OPTIONS"]
-    cached_methods   = ["GET", "HEAD"]
-    target_origin_id = local.origin_target_id
-
-    forwarded_values {
-      query_string = var.forward_query_string
-      headers      = var.forwarded_headers
-      cookies {
-        forward = "none"
-      }
-    }
-
-    viewer_protocol_policy = "redirect-to-https"
-    min_ttl                = 0
-    default_ttl            = 3600
-    max_ttl                = 86400
-    compress               = true
-  }
-
-  price_class = var.price_class
-
-  restrictions {
-    geo_restriction {
-      restriction_type = "none"
-    }
-  }
-
-  viewer_certificate {
-    acm_certificate_arn      = aws_acm_certificate_validation.cert.certificate_arn
-    ssl_support_method       = "sni-only"
-    minimum_protocol_version = "TLSv1"
-  }
-}*/
