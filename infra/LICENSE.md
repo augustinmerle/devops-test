@@ -1,1 +1,0 @@
-Copyright (c) gentlemen-worker 2023

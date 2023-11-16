@@ -1,0 +1,5 @@
+aws_region = "eu-west-3"
+app_name        = "devopstest"
+app_environment = "dev"
+zone_id = "Z060497011SI50TIA0K9T"
+domain_name= "g8w.co"
