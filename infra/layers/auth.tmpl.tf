@@ -29,5 +29,5 @@ module "webapp_auth" {
   bucket_name = "bucket1-{{env}}"
   name = "auth"
   domain_name= "devopstest.{{dns}}"
-  zone = "Z060497011SI50TIA0K9T"
+  zone = "{{zone_id}}"
 }

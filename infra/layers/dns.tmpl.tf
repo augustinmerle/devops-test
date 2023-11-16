@@ -25,7 +25,7 @@ provider "aws" {
 }
 
 #resource "aws_route53_record" "website" {
-#  zone_id = "Z060497011SI50TIA0K9T"
+#  zone_id = "{{zone_id}}"
 #  name    = "devopstest.{{dns}}"
 #  type    = "A"
 #  alias {
@@ -54,7 +54,7 @@ resource "aws_route53_record" "cert_validation" {
   allow_overwrite = var.can_overwrite
   name            = element(tolist(aws_acm_certificate.cert.domain_validation_options), 0).resource_record_name
   type            = element(tolist(aws_acm_certificate.cert.domain_validation_options), 0).resource_record_type
-  zone_id         = "Z060497011SI50TIA0K9T"
+  zone_id         = "{{zone_id}}"
   records         = [element(tolist(aws_acm_certificate.cert.domain_validation_options), 0).resource_record_value]
   ttl             = 60
 }

@@ -29,7 +29,7 @@ module "webapp_info" {
   bucket_name = "bucket2-prod"
   name = "info"
   domain_name= "devopstest.g8w.co"
-  zone = "Z060497011SI50TIA0K9T"
+  zone = ""
 }
 
 output "cloudfront_arn_info"  {

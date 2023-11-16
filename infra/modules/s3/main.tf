@@ -4,6 +4,21 @@ resource "aws_s3_bucket" "website" {
     Website = var.name
   }
 }
+resource "aws_s3_bucket_versioning" "website" {
+  bucket = aws_s3_bucket.website.id
+  versioning_configuration {
+    status = "Enabled"
+  }
+}
+
+resource "aws_s3_bucket_server_side_encryption_configuration" "website" {
+  bucket = aws_s3_bucket.website.id
+  rule {
+    apply_server_side_encryption_by_default {
+      sse_algorithm     = "AES256"
+    }
+  }
+}
 resource "aws_s3_bucket_acl" "website" {
   bucket = aws_s3_bucket.website.id
   acl    = "public-read"
@@ -62,7 +77,7 @@ resource "aws_s3_bucket_cors_configuration" "website" {
 resource "aws_s3_object" "object" {
   bucket = aws_s3_bucket.website.bucket
   key    = "index.html"
-  source = "/Users/augustindelaveaucoupet/Sites/test-devops/index-${var.name}.html"
+  source = "../../../../index-${var.name}.html"
 
   # The filemd5() function is available in Terraform 0.11.12 and later
   # For Terraform 0.11.11 and earlier, use the md5() function and the file() function:

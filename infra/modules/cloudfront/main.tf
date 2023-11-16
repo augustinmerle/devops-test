@@ -29,7 +29,7 @@ resource "aws_cloudfront_distribution" "s3distribution" {
   default_cache_behavior {
     allowed_methods  = ["GET", "HEAD", "OPTIONS"]
     cached_methods   = ["GET", "HEAD"]
-    target_origin_id = local.origin_target_id
+    target_origin_id = var.origin_target_id
 
     dynamic "forwarded_values" {
       for_each = (null != var.cache_policy_id) ? {} : { x : true }

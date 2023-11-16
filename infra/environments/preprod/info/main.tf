@@ -28,8 +28,8 @@ module "webapp_info" {
   source = "../../../modules/webapp"
   bucket_name = "bucket2-preprod"
   name = "info"
-  domain_name= "devopstest."
-  zone = "Z060497011SI50TIA0K9T"
+  domain_name= "devopstest.staging.g8w.co"
+  zone = ""
 }
 
 output "cloudfront_arn_info"  {

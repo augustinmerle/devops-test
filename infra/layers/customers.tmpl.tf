@@ -29,7 +29,7 @@ module "webapp_customers" {
   bucket_name = "bucket3-{{env}}"
   name = "customers"
   domain_name= "devopstest.{{dns}}"
-  zone = "Z060497011SI50TIA0K9T"
+  zone = "{{zone_id}}"
 }
 
 output "cloudfront_customers_id" {

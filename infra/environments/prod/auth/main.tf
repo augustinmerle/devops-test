@@ -29,5 +29,5 @@ module "webapp_auth" {
   bucket_name = "bucket1-prod"
   name = "auth"
   domain_name= "devopstest.g8w.co"
-  zone = "Z060497011SI50TIA0K9T"
+  zone = ""
 }

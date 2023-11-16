@@ -25,8 +25,8 @@ provider "aws" {
 }
 
 #resource "aws_route53_record" "website" {
-#  zone_id = "Z060497011SI50TIA0K9T"
-#  name    = "devopstest."
+#  zone_id = ""
+#  name    = "devopstest.staging.g8w.co"
 #  type    = "A"
 #  alias {
 #    name                   = module.main_cloudfront.domain_name
@@ -35,7 +35,7 @@ provider "aws" {
 #  }
 #}
 resource "aws_acm_certificate" "cert" {
-  domain_name               = "devopstest."
+  domain_name               = "devopstest.staging.g8w.co"
   validation_method         = "DNS"
   provider                  = aws.acm
   subject_alternative_names = null
@@ -54,7 +54,7 @@ resource "aws_route53_record" "cert_validation" {
   allow_overwrite = var.can_overwrite
   name            = element(tolist(aws_acm_certificate.cert.domain_validation_options), 0).resource_record_name
   type            = element(tolist(aws_acm_certificate.cert.domain_validation_options), 0).resource_record_type
-  zone_id         = "Z060497011SI50TIA0K9T"
+  zone_id         = ""
   records         = [element(tolist(aws_acm_certificate.cert.domain_validation_options), 0).resource_record_value]
   ttl             = 60
 }

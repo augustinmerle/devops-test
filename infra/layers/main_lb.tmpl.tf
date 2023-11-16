@@ -60,61 +60,14 @@ module "main_cloudfront" {
   domain_name = "devopstest.{{dns}}"
   name = "main-lb-cf"
   dns = "devopstest.{{dns}}"
-
+  origin_target_id = data.terraform_remote_state.customers.outputs.cloudfront_customers_id
   custom_behaviors = [
     {
       path_pattern =  "/customers/*"
-      target_origin_id = "bucket3-dev.s3-website"
-      //target_origin_id = data.terraform_remote_state.customers.outputs.cloudfront_customers_id
+      //target_origin_id = "bucket3-dev.s3-website"
+      target_origin_id = data.terraform_remote_state.customers.outputs.cloudfront_customers_id
     }
   ]
 
   certificate_arn = data.terraform_remote_state.dns.outputs.certificate_arn
 }
-#
-#resource "aws_cloudfront_distribution" "main_distribution" {
-#  origin {
-#    domain_name = aws_acm_certificate.cert.domain_name
-#    origin_id   = "mainOrigin"
-#    // Configuration de l'origine principale
-#    // ...
-#  }
-#
-#  enabled = true
-#
-#  aliases = [aws_acm_certificate.cert.domain_name]
-#
-#  default_cache_behavior {
-#
-#  }
-#
-#  ordered_cache_behavior {
-#    path_pattern     = "/auth/*"
-#    target_origin_id = data.terraform_remote_state.auth.outputs.cloudfront_arn
-#    // Configuration spécifique pour /auth
-#    // ...
-#  }
-#
-#  ordered_cache_behavior {
-#    path_pattern     = "/info/*"
-#    target_origin_id = data.terraform_remote_state.info.outputs.cloudfront_arn
-#    // Configuration spécifique pour /info
-#    // ...
-#  }
-#
-#  ordered_cache_behavior {
-#    path_pattern     = "/customers/*"
-#    target_origin_id = data.terraform_remote_state.customers.outputs.cloudfront_arn
-#    // Configuration spécifique pour /customers
-#    // ...
-#  }
-#
-#  viewer_certificate {
-#    acm_certificate_arn            = "your_acm_certificate_arn"
-#    ssl_support_method             = "sni-only"
-#    minimum_protocol_version       = "TLSv1.2_2019"
-#    cloudfront_default_certificate = false
-#  }
-#
-#  // Autres configurations...
-#}

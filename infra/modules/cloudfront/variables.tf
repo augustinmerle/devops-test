@@ -6,6 +6,9 @@ variable "custom_origin_headers" {
   }))
   default = []
 }
+variable "origin_target_id" {
+  type = string
+}
 variable "name" {}
 variable "default_root_object" {
   type    = string

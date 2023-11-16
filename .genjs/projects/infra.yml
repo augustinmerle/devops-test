@@ -43,13 +43,18 @@ vars:
     dev:
       vars:
         dns: dev.{{root_dns}}
+        zone_id: "Z060497011SI50TIA0K9T"
         debug: "true"
         razzle_verbose: "1"
     preprod:
-      vars: []
+      vars:
+        dns: "staging.{{root_dns}}"
+        zone_id: ""
+        subzones: [ dev ]
     prod:
       vars:
         dns: "{{root_dns}}"
+        zone_id: ""
         subzones: [dev]
 
 

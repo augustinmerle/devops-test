@@ -40,12 +40,20 @@
     "environments": {
         "dev": {
             "dns": "dev.{{root_dns}}",
+            "zone_id": "Z060497011SI50TIA0K9T",
             "debug": "true",
             "razzle_verbose": "1"
         },
-        "preprod": [],
+        "preprod": {
+            "dns": "staging.{{root_dns}}",
+            "zone_id": "",
+            "subzones": [
+                "dev"
+            ]
+        },
         "prod": {
             "dns": "{{root_dns}}",
+            "zone_id": "",
             "subzones": [
                 "dev"
             ]

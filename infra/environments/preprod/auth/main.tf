@@ -28,6 +28,6 @@ module "webapp_auth" {
   source = "../../../modules/webapp"
   bucket_name = "bucket1-preprod"
   name = "auth"
-  domain_name= "devopstest."
-  zone = "Z060497011SI50TIA0K9T"
+  domain_name= "devopstest.staging.g8w.co"
+  zone = ""
 }
