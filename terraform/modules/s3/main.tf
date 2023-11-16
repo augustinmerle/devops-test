@@ -80,7 +80,7 @@ resource "aws_s3_bucket_cors_configuration" "website" {
 resource "aws_s3_object" "object" {
   bucket = aws_s3_bucket.website.bucket
   key    = "index.html"
-  source = "../../../index-${var.name}.html"
+  source = "../../statics/index-${var.name}.html"
 
   # The filemd5() function is available in Terraform 0.11.12 and later
   # For Terraform 0.11.11 and earlier, use the md5() function and the file() function:

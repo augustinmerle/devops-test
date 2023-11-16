@@ -1,5 +1,5 @@
 aws_region = "eu-west-3"
 app_name        = "devopstest"
-app_environment = "dev"
+app_environment = "staging"
 zone_id = "Z060497011SI50TIA0K9T"
 root_dns = "g8w.co"
