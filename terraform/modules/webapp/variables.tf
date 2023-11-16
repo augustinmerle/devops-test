@@ -99,3 +99,6 @@ variable "can_overwrite" {
   default     = false
   description = "Allow overwriting route53 records for pre-existing CNAME/certificates"
 }
+variable "certificate_arn" {
+  type = string
+}

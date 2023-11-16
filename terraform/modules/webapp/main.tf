@@ -25,8 +25,13 @@ module "cloudfront" {
   domain_name = module.website.s3_endpoint
   name = var.name
   dns = ""
+  custom_behaviors = [
+    #    {
+    #      path_pattern =  "/auth/*"
+    #      target_origin_id = module.webapp_auth.cloudfront_id
+    #    }
   origin_target_id = local.origin_target_id
-  certificate_arn = data.terraform_remote_state.dns.outputs.certificate_arn
+  certificate_arn = var.certificate_arn
 }
 
 
