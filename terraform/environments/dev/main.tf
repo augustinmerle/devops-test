@@ -29,7 +29,7 @@ resource "aws_route53_record" "website_domain" {
   name    = "devopstest.${var.app_environment}.g8w.co"
   type    = "A"
   alias {
-    name                   = "devopstest.${var.app_environment}.g8w.co"
+    name                   = module.main_cloudfront.domain_name
     zone_id                = var.zone_id
     evaluate_target_health = false
   }
@@ -65,30 +65,30 @@ resource "aws_acm_certificate_validation" "cert" {
   certificate_arn         = aws_acm_certificate.cert.arn
   validation_record_fqdns = [aws_route53_record.cert_validation.fqdn]
 }
-#
-#module "main_cloudfront" {
-#  source = "../../modules/cloudfront"
-#  domain_name = "devopstest.dev.g8w.co"
-#  name = "main-lb-cf"
-#  dns = "devopstest.dev.g8w.co"
-#  origin_target_id = aws_route53_record.website_domain.id
-#  custom_behaviors = [
-#    {
-#      path_pattern =  "/auth/*"
-#      target_origin_id = module.webapp_auth.cloudfront_id
-#    },
-#    {
-#      path_pattern =  "/customers/*"
-#      target_origin_id = module.webapp_customers.cloudfront_id
-#    },
-#    {
-#      path_pattern =  "/info/*"
-#      target_origin_id = module.webapp_info.cloudfront_id
-#    }
-#  ]
-#
-#  certificate_arn = aws_acm_certificate_validation.cert.certificate_arn
-#}
+
+module "main_cloudfront" {
+  source = "../../modules/cloudfront"
+  domain_name = "devopstest.dev.g8w.co"
+  name = "main-lb-cf"
+  dns = "devopstest.dev.g8w.co"
+  origin_target_id = "website-customers-s3"
+  custom_behaviors = [
+    {
+      path_pattern =  "/auth/*"
+      target_origin_id = module.webapp_auth.cloudfront_id
+    },
+    {
+      path_pattern =  "/customers/*"
+      target_origin_id = module.webapp_customers.cloudfront_id
+    },
+    {
+      path_pattern =  "/info/*"
+      target_origin_id = module.webapp_info.cloudfront_id
+    }
+  ]
+
+  certificate_arn = aws_acm_certificate_validation.cert.certificate_arn
+}
 
 data "terraform_remote_state" "dns" {
   backend = "remote"
@@ -106,6 +106,7 @@ module "webapp_auth" {
   bucket_name = "bucket1-${var.app_environment}"
   domain_name= "devopstest.${var.app_environment}.g8w.co"
   zone = var.zone_id
+  origin_target_id = "bucket1-${var.app_environment}-endpoint"
   certificate_arn = aws_acm_certificate_validation.cert.certificate_arn
 }
 
@@ -115,6 +116,7 @@ module "webapp_customers" {
   bucket_name = "bucket3-${var.app_environment}"
   domain_name= "devopstest.${var.app_environment}.g8w.co"
   zone = var.zone_id
+  origin_target_id = "bucket3-${var.app_environment}-endpoint"
   certificate_arn = aws_acm_certificate_validation.cert.certificate_arn
 }
 
@@ -124,6 +126,7 @@ module "webapp_info" {
   bucket_name = "bucket2-${var.app_environment}"
   domain_name= "devopstest.${var.app_environment}.g8w.co"
   zone = var.zone_id
+  origin_target_id = "bucket2-${var.app_environment}-endpoint"
   certificate_arn = aws_acm_certificate_validation.cert.certificate_arn
 }
 

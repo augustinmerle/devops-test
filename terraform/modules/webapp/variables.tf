@@ -102,3 +102,6 @@ variable "can_overwrite" {
 variable "certificate_arn" {
   type = string
 }
+variable "origin_target_id" {
+  type = string
+}

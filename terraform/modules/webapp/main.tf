@@ -26,11 +26,12 @@ module "cloudfront" {
   name = var.name
   dns = ""
   custom_behaviors = [
-    #    {
-    #      path_pattern =  "/auth/*"
-    #      target_origin_id = module.webapp_auth.cloudfront_id
-    #    }
-  origin_target_id = local.origin_target_id
+        {
+          path_pattern =  "/${var.name}/*"
+          target_origin_id = module.website.s3_endpoint
+        }
+    ]
+  origin_target_id = module.website.s3_endpoint
   certificate_arn = var.certificate_arn
 }
 

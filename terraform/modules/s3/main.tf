@@ -53,13 +53,16 @@ resource "aws_s3_bucket_policy" "website" {
 
 resource "aws_s3_bucket_website_configuration" "website" {
   bucket = aws_s3_bucket.website.bucket
-
   index_document {
     suffix = var.index_document
   }
   error_document {
     key = ("" == var.error_document) ? var.index_document : var.error_document
   }
+}
+resource "aws_s3_access_point" "website" {
+  bucket = aws_s3_bucket.website.bucket
+  name   = "${var.bucket_name}-endpoint"
 }
 resource "aws_s3_bucket_cors_configuration" "website" {
   count  = (var.bucket_cors == true) ? 1 : 0

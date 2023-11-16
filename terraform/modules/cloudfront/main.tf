@@ -2,7 +2,7 @@ resource "aws_cloudfront_distribution" "s3distribution" {
   origin {
     domain_name = var.domain_name
 #    origin_path = "/${var.name}"
-    origin_id   = local.origin_target_id
+    origin_id   = var.origin_target_id
     custom_origin_config {
       // These are all the defaults.
       http_port              = "80"
@@ -30,7 +30,6 @@ resource "aws_cloudfront_distribution" "s3distribution" {
     allowed_methods  = ["GET", "HEAD", "OPTIONS"]
     cached_methods   = ["GET", "HEAD"]
     target_origin_id = var.origin_target_id
-
     dynamic "forwarded_values" {
       for_each = (null != var.cache_policy_id) ? {} : { x : true }
       content {
@@ -41,6 +40,7 @@ resource "aws_cloudfront_distribution" "s3distribution" {
         headers = var.forwarded_headers
       }
     }
+
 
     viewer_protocol_policy     = "redirect-to-https"
     min_ttl                    = 0
@@ -65,7 +65,14 @@ resource "aws_cloudfront_distribution" "s3distribution" {
       origin_request_policy_id   = lookup(ordered_cache_behavior.value, "origin_request_policy_id", null)
       cache_policy_id            = lookup(ordered_cache_behavior.value, "cache_policy_id", null)
       response_headers_policy_id = lookup(ordered_cache_behavior.value, "response_headers_policy_id", null)
+      forwarded_values {
+        query_string = false
+        cookies {
+          forward = "none"
+        }
+      }
     }
+
   }
 
   price_class = var.price_class
