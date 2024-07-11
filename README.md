@@ -1,6 +1,14 @@
 # PLATFORM
 `platform` is the codename of the G8w devops-test.
 
+
+### [Tab A](#tab/tab-a)
+Tab A content.
+
+### [Tab B](#tab/tab-b)
+Tab B content.
+***
+
 ## Introduction
 
 This repository is a mono-repository that contains all the code for the platform.
