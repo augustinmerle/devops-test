@@ -2,19 +2,11 @@
 `platform` is the codename of the G8w devops-test.
 
 
-```javascript
-var s = "JavaScript syntax highlighting";
-alert(s);
+```javascript I'm A tab
+console.log('Code Tab A');
 ```
- 
-```python
-s = "Python syntax highlighting"
-print s
-```
- 
-```
-No language indicated, so no syntax highlighting. 
-But let's throw in a <b>tag</b>.
+```javascript I'm tab B
+console.log('Code Tab B');
 ```
 
 ## Introduction
