@@ -1,6 +1,22 @@
 # PLATFORM
 `platform` is the codename of the G8w devops-test.
 
+
+```javascript
+var s = "JavaScript syntax highlighting";
+alert(s);
+```
+ 
+```python
+s = "Python syntax highlighting"
+print s
+```
+ 
+```
+No language indicated, so no syntax highlighting. 
+But let's throw in a <b>tag</b>.
+```
+
 ## Introduction
 
 This repository is a mono-repository that contains all the code for the platform.
